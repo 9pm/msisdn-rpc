@@ -9,15 +9,15 @@ import (
 
 // Args : model for arguments
 type Args struct {
-	msisdn int
+	Msisdn int
 }
 
 // User : model to return
 type User struct {
-	countryCode       int
-	mno               int
-	countryIdentifier string
-	subscriber        int
+	CountryCode       int    `json:"countryCode"`
+	Mno               int    `json:"mno"`
+	CountryIdentifier string `json:"counrtyIdentifier"`
+	Subscriber        int    `json:"subscriber"`
 }
 
 func main() {
@@ -36,6 +36,6 @@ func main() {
 		log.Fatal("arith error:", err)
 	}
 
-	fmt.Printf("Req/Res: %d\n", args.msisdn)
+	fmt.Printf("Req/Res: %d\n", args.Msisdn)
 	fmt.Println(reply)
 }

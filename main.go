@@ -10,15 +10,15 @@ import (
 
 // User : model to return
 type User struct {
-	countryCode       int
-	mno               int
-	countryIdentifier string
-	subscriber        int
+	CountryCode       int    `json:"countryCode"`
+	Mno               int    `json:"mno"`
+	CountryIdentifier string `json:"counrtyIdentifier"`
+	Subscriber        int    `json:"subscriber"`
 }
 
 // Args : model for arguments
 type Args struct {
-	msisdn int
+	Msisdn int
 }
 
 // Parser : model with funcs
@@ -26,15 +26,15 @@ type Parser struct{}
 
 // Extract : parse msisdn and return User
 func (t *Parser) Extract(args *Args, reply *User) error {
-	chelebok := args.msisdn
+	chelebok := args.Msisdn
 	chpok := User{
-		countryCode:       01,
-		mno:               15,
-		countryIdentifier: "test",
-		subscriber:        1509,
+		CountryCode:       01,
+		Mno:               15,
+		CountryIdentifier: "test",
+		Subscriber:        1509,
 	}
 	fmt.Printf("Req: %d\n", chelebok)
-	fmt.Println(chpok)
+	fmt.Println("Res:", chpok)
 	*reply = chpok
 	return nil
 }
