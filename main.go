@@ -25,12 +25,14 @@ type Args struct {
 // Parser : model with funcs
 type Parser struct{}
 
-func toStr(num int) string {
+// ToStr : convert int to string
+func ToStr(num int) string {
 	s := strconv.Itoa(num)
 	return s
 }
 
-func toInt(s string) int {
+// ToInt : convert string to int
+func ToInt(s string) int {
 	i, err := strconv.Atoi(s)
 	if err != nil {
 		fmt.Print("")
@@ -38,23 +40,27 @@ func toInt(s string) int {
 	return i
 }
 
+func makeCC(s string) string {
+	return "0" + s
+}
+
 func getCC(num int) int {
 	var cc int
-	snum := toStr(num)
+	snum := ToStr(num)
 	switch len(snum) {
 	case 13:
-		cc = toInt(snum[:3])
+		cc = ToInt(snum[:3])
 	case 12:
-		cc = toInt(snum[:2])
+		cc = ToInt(makeCC(snum[:2]))
 	case 11:
-		cc = toInt(snum[:1])
+		cc = ToInt(makeCC(makeCC(snum[:1])))
 	default:
 	}
 	return cc
 }
 
 func getContryName() {
-	OpenCsv()
+	FindCountry(894)
 }
 
 // Extract : parse msisdn and return User

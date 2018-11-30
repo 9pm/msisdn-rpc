@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
-	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -21,11 +21,11 @@ type Country struct {
 	SubRegionCode string
 }
 
-// OpenCsv : decription....
-func OpenCsv() string {
+// FindCountry : decription...
+func FindCountry(cc int) Country {
 	csvFile, _ := os.Open("data/all.csv")
 	reader := csv.NewReader(bufio.NewReader(csvFile))
-	var coutries []Country
+	var coutry Country
 
 	for {
 		line, error := reader.Read()
@@ -35,18 +35,20 @@ func OpenCsv() string {
 			log.Fatal(error)
 		}
 
-		coutries = append(coutries, Country{
-			Name:          line[0],
-			CC1:           line[1],
-			CC2:           line[2],
-			CC:            line[3],
-			Region:        line[4],
-			SubRegion:     line[5],
-			RegionCode:    line[6],
-			SubRegionCode: line[7],
-		})
+		if ToInt(line[3]) == cc {
+			coutry = Country{
+				Name:          line[0],
+				CC1:           line[1],
+				CC2:           line[2],
+				CC:            line[3],
+				Region:        line[4],
+				SubRegion:     line[5],
+				RegionCode:    line[6],
+				SubRegionCode: line[7],
+			}
+		}
 
 	}
-	coutriesJSON, _ := json.Marshal(coutries)
-	return string(coutriesJSON)
+	fmt.Println(coutry)
+	return coutry
 }
