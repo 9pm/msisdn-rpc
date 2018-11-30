@@ -53,6 +53,10 @@ func getCC(num int) int {
 	return cc
 }
 
+func getContryName() {
+	OpenCsv()
+}
+
 // Extract : parse msisdn and return User
 func (t *Parser) Extract(args *Args, reply *User) error {
 	input := args.Msisdn
@@ -71,6 +75,8 @@ func (t *Parser) Extract(args *Args, reply *User) error {
 }
 
 func main() {
+	getContryName()
+
 	cal := new(Parser)
 	server := rpc.NewServer()
 
