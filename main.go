@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"strconv"
 )
 
 // User : model to return
@@ -24,17 +25,47 @@ type Args struct {
 // Parser : model with funcs
 type Parser struct{}
 
+func toStr(num int) string {
+	s := strconv.Itoa(num)
+	return s
+}
+
+func toInt(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		fmt.Print("")
+	}
+	return i
+}
+
+func getCC(num int) int {
+	var cc int
+	snum := toStr(num)
+	switch len(snum) {
+	case 13:
+		cc = toInt(snum[:3])
+	case 12:
+		cc = toInt(snum[:2])
+	case 11:
+		cc = toInt(snum[:1])
+	default:
+	}
+	return cc
+}
+
 // Extract : parse msisdn and return User
 func (t *Parser) Extract(args *Args, reply *User) error {
-	chelebok := args.Msisdn
+	input := args.Msisdn
+
 	chpok := User{
 		CountryCode:       01,
 		Mno:               15,
 		CountryIdentifier: "test",
 		Subscriber:        1509,
 	}
-	fmt.Printf("Req: %d\n", chelebok)
-	fmt.Println("Res:", chpok)
+
+	fmt.Printf("Req: %d\n", input)
+	// fmt.Println("Res:", chpok)
 	*reply = chpok
 	return nil
 }
