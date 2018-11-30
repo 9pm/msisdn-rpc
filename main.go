@@ -14,7 +14,8 @@ type User struct {
 	CountryCode       int    `json:"countryCode"`
 	Mno               int    `json:"mno"`
 	CountryIdentifier string `json:"counrtyIdentifier"`
-	Subscriber        int    `json:"subscriber"`
+	CountryName       string `json:"countryName"`
+	Subscriber        string `json:"subscriber"`
 }
 
 // Args : model for arguments
@@ -44,34 +45,60 @@ func makeCC(s string) string {
 	return "0" + s
 }
 
-func getCC(num int) int {
-	var cc int
+func getCC(num int) string {
+	var cc string
 	snum := ToStr(num)
 	switch len(snum) {
 	case 13:
-		cc = ToInt(snum[:3])
+		cc = snum[:3]
 	case 12:
-		cc = ToInt(makeCC(snum[:2]))
+		cc = makeCC(snum[:2])
 	case 11:
-		cc = ToInt(makeCC(makeCC(snum[:1])))
+		cc = makeCC(makeCC(snum[:1]))
 	default:
+		cc = "000"
+	}
+	return cc
+}
+
+func getSubscriber(num int) string {
+	var cc string
+	snum := ToStr(num)
+	switch len(snum) {
+	case 13:
+		cc = snum[7:]
+	case 12:
+		cc = snum[6:]
+	case 11:
+		cc = snum[5:]
+	default:
+		cc = "000000"
 	}
 	return cc
 }
 
 func getContryName() {
-	FindCountry(894)
+	FindCountry("004")
 }
 
 // Extract : parse msisdn and return User
 func (t *Parser) Extract(args *Args, reply *User) error {
 	input := args.Msisdn
 
+	cc := getCC(input)
+	fmt.Printf("Country code: %s\n", cc)
+
+	country := FindCountry(cc)
+	fmt.Println(country)
+
+	fmt.Println("Subscriber: " + getSubscriber(input))
+
 	chpok := User{
-		CountryCode:       01,
-		Mno:               15,
-		CountryIdentifier: "test",
-		Subscriber:        1509,
+		CountryCode:       ToInt(cc),
+		Mno:               1824,
+		CountryIdentifier: country.CC1,
+		CountryName:       country.Name,
+		Subscriber:        getSubscriber(input),
 	}
 
 	fmt.Printf("Req: %d\n", input)

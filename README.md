@@ -13,7 +13,9 @@ SN = Subscriber Number
 ## How to
 
 ```sh
-go run main.go
+# server
+go run *.go
 
+# client
 go run client/client.go
 ```
