@@ -1,5 +1,6 @@
 /*
- * @author Daniel Popov
+ * @author Daniel Popov <lalabuy9948@gmail.com>
+ * @copyright <Do whatever you want>
  */
 
 package main
