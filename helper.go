@@ -51,6 +51,7 @@ func FindCountry(cc string) Country {
 		}
 
 	}
+
 	fmt.Printf("Country: %s\n", coutry.Name)
 	return coutry
 }

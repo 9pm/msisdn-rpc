@@ -1,3 +1,7 @@
+/*
+ * @author Daniel Popov
+ */
+
 package main
 
 import (
@@ -23,7 +27,7 @@ type Args struct {
 	Msisdn int
 }
 
-// Parser : model with funcs
+// Parser : model for funcs
 type Parser struct{}
 
 // ToStr : convert int to string
