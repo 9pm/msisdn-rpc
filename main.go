@@ -16,11 +16,12 @@ import (
 
 // User : model to return
 type User struct {
-	CountryCode       int    `json:"countryCode"`
-	Mno               int    `json:"mno"`
-	CountryIdentifier string `json:"counrtyIdentifier"`
-	CountryName       string `json:"countryName"`
-	Subscriber        string `json:"subscriber"`
+	CountryCode       string   `json:"countryCode"`
+	Mno               []string `json:"mno"`
+	DialingCode       string   `json:"dialingCode"`
+	CountryIdentifier string   `json:"counrtyIdentifier"`
+	CountryName       string   `json:"countryName"`
+	Subscriber        string   `json:"subscriber"`
 }
 
 // Args : model for arguments
@@ -41,7 +42,7 @@ func ToStr(num int) string {
 func ToInt(s string) int {
 	i, err := strconv.Atoi(s)
 	if err != nil {
-		fmt.Print("")
+		fmt.Println(err)
 	}
 	return i
 }
@@ -91,18 +92,18 @@ func (t *Parser) Extract(args *Args, reply *User) error {
 	input := args.Msisdn
 
 	cc := getCC(input)
-	fmt.Printf("Country code: %s\n", cc)
-
 	country := FindCountry(cc)
-	fmt.Println(country)
-
-	fmt.Println("Subscriber: " + getSubscriber(input))
+	countryName := country.Name
+	mnos := FindMNO(countryName)
+	countryIdentifier := country.CC1
+	dialingCode := GetDialing(countryIdentifier)
 
 	chpok := User{
-		CountryCode:       ToInt(cc),
-		Mno:               1824,
+		CountryCode:       cc,
+		Mno:               mnos,
+		DialingCode:       dialingCode,
 		CountryIdentifier: country.CC1,
-		CountryName:       country.Name,
+		CountryName:       countryName,
 		Subscriber:        getSubscriber(input),
 	}
 
@@ -113,8 +114,6 @@ func (t *Parser) Extract(args *Args, reply *User) error {
 }
 
 func main() {
-	getContryName()
-
 	cal := new(Parser)
 	server := rpc.NewServer()
 

@@ -19,10 +19,12 @@ type Args struct {
 
 // User : model to return
 type User struct {
-	CountryCode       int    `json:"countryCode"`
-	Mno               int    `json:"mno"`
-	CountryIdentifier string `json:"counrtyIdentifier"`
-	Subscriber        string `json:"subscriber"`
+	CountryCode       string   `json:"countryCode"`
+	Mno               []string `json:"mno"`
+	DialingCode       string   `json:"dialingCode"`
+	CountryIdentifier string   `json:"counrtyIdentifier"`
+	CountryName       string   `json:"countryName"`
+	Subscriber        string   `json:"subscriber"`
 }
 
 func main() {
@@ -38,13 +40,15 @@ func main() {
 	c := jsonrpc.NewClient(client)
 	err = c.Call("Parser.Extract", args, &reply)
 	if err != nil {
-		log.Fatal("arith error:", err)
+		log.Fatal("parse error:", err)
 	}
 
-	fmt.Printf("Req/Res: %d\n", args.Msisdn)
+	fmt.Printf("MSISDN: %d\n\n", args.Msisdn)
 
-	fmt.Printf("County code: %d\n", reply.CountryCode)
-	fmt.Printf("MNO: %d\n", 0)
+	fmt.Printf("County code: %s\n", reply.CountryCode)
+	fmt.Println("MNO: ", reply.Mno)
+	fmt.Printf("Dialing code: %s\n", reply.DialingCode)
 	fmt.Printf("County identifier: %s\n", reply.CountryIdentifier)
+	fmt.Printf("County name: %s\n", reply.CountryName)
 	fmt.Printf("Subscriber: %s\n", reply.Subscriber)
 }

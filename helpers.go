@@ -35,9 +35,18 @@ type Operator struct {
 	Operator string `json:"operator"`
 }
 
+// Dialing : model for dialing code
+type Dialing struct {
+	CCAlpha string `json:"ccalpha"`
+	Code    string `json:"code"`
+}
+
 // FindCountry : return one Coutry by coutry code
 func FindCountry(cc string) Country {
-	csvFile, _ := os.Open("data/countries.csv")
+	csvFile, err := os.Open("data/countries.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	var coutry Country
 
@@ -71,12 +80,14 @@ func FindCountry(cc string) Country {
 }
 
 // FindMNO : function which searching MNO identifiers in dataset
-func FindMNO(countryName string) []Operator {
-	csvFile, _ := os.Open("data/operator-list.csv.csv")
+func FindMNO(countryName string) []string {
+	csvFile, err := os.Open("data/operator-list.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
 	reader := csv.NewReader(bufio.NewReader(csvFile))
-	var operator []Operator
 
-	fmt.Println(countryName)
+	var mnos []string
 
 	for {
 		line, error := reader.Read()
@@ -87,14 +98,41 @@ func FindMNO(countryName string) []Operator {
 		}
 
 		if countryName == line[3] {
-			operator = append(operator, Operator{
-				MCCMNC:   line[0],
-				MCC:      line[1],
-				MNC:      line[2],
-				Country:  line[3],
-				Operator: line[4],
-			})
+			if line[0] != "" {
+				mnos = append(mnos, line[0])
+			} else {
+				mnos = append(mnos, "NA")
+			}
 		}
 	}
-	return operator
+	return mnos
+}
+
+//GetDialing : find dialing code by country code alpha
+func GetDialing(ccalpha string) string {
+	csvFile, err := os.Open("data/dialing-codes.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+
+	var dialingCode string
+
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+		if ccalpha == line[0] {
+			if line[1] != "" {
+				dialingCode = line[1]
+			} else {
+				dialingCode = "NA"
+			}
+		}
+	}
+
+	return dialingCode
 }
