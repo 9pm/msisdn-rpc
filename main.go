@@ -108,7 +108,6 @@ func (t *Parser) Extract(args *Args, reply *User) error {
 	}
 
 	fmt.Printf("Req: %d\n", input)
-	// fmt.Println("Res:", chpok)
 	*reply = chpok
 	return nil
 }

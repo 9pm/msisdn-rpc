@@ -32,9 +32,20 @@ SN = Subscriber Number
 ## How to
 
 ```sh
+git clone git@github.com:lalabuy948/msisdn-rpc.git --depth=0
+cd msisdn-rpc
+
 # server
 go run *.go
 
 # client
 go run client/client.go
 ```
+
+## RPC
+
+I chose [JSON-RPC 2.0](https://golang.org/pkg/net/rpc/jsonrpc/) because of JSON simplicity and it's standard built in library.
+
+`method: parse`
+
+`parameters: msisdn`
