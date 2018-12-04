@@ -16,12 +16,11 @@ import (
 
 // User : model to return
 type User struct {
-	CountryCode       string   `json:"countryCode"`
 	Mno               []string `json:"mno"`
 	DialingCode       string   `json:"dialingCode"`
+	Subscriber        string   `json:"subscriber"`
 	CountryIdentifier string   `json:"counrtyIdentifier"`
 	CountryName       string   `json:"countryName"`
-	Subscriber        string   `json:"subscriber"`
 }
 
 // Args : model for arguments
@@ -47,20 +46,18 @@ func ToInt(s string) int {
 	return i
 }
 
-func makeCC(s string) string {
-	return "0" + s
-}
-
 func getCC(num int) string {
 	var cc string
 	snum := ToStr(num)
 	switch len(snum) {
+	case 14:
+		cc = snum[:4]
 	case 13:
 		cc = snum[:3]
 	case 12:
-		cc = makeCC(snum[:2])
+		cc = snum[:2]
 	case 11:
-		cc = makeCC(makeCC(snum[:1]))
+		cc = snum[:1]
 	default:
 		cc = "000"
 	}
@@ -71,6 +68,8 @@ func getSubscriber(num int) string {
 	var cc string
 	snum := ToStr(num)
 	switch len(snum) {
+	case 14:
+		cc = snum[8:]
 	case 13:
 		cc = snum[7:]
 	case 12:
@@ -91,28 +90,35 @@ func getContryName() {
 func (t *Parser) Extract(args *Args, reply *User) error {
 	input := args.Msisdn
 
+	// CALLING CODE ITS NOT WHAT DO YOU THINK
 	cc := getCC(input)
-	country := FindCountry(cc)
+	alpha := GetAlpha(cc)
+	country := FindCountry(alpha)
 	countryName := country.Name
 	mnos := FindMNO(countryName)
 	countryIdentifier := country.CC1
-	dialingCode := GetDialing(countryIdentifier)
+	dialingCode := cc
 
 	chpok := User{
-		CountryCode:       cc,
 		Mno:               mnos,
 		DialingCode:       dialingCode,
-		CountryIdentifier: country.CC1,
+		CountryIdentifier: countryIdentifier,
 		CountryName:       countryName,
 		Subscriber:        getSubscriber(input),
 	}
 
 	fmt.Printf("Req: %d\n", input)
+	fmt.Println(chpok)
 	*reply = chpok
 	return nil
 }
 
 func main() {
+
+	GetAlpha("91")   // IN
+	GetAlpha("7")    // RU
+	GetAlpha("1684") // AS
+
 	cal := new(Parser)
 	server := rpc.NewServer()
 

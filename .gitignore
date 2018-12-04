@@ -1,4 +1,16 @@
 .vscode
 .idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
 *.DS_Store
+
+
+frontend/*
+frontend/*.DS_Store
+frontend/node_modules/
+frontend/dist/
+frontend/npm-debug.log
+frontend/yarn-error.log

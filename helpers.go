@@ -41,16 +41,15 @@ type Dialing struct {
 	Code    string `json:"code"`
 }
 
-// FindCountry : return one Coutry by coutry code
-func FindCountry(cc string) Country {
-	csvFile, err := os.Open("data/countries.csv")
+// GetAlpha : get alpha country code by calling code
+func GetAlpha(cc string) string {
+	csvFile, err := os.Open("data/dialing-codes.csv")
 	if err != nil {
 		fmt.Println(err)
 	}
 	reader := csv.NewReader(bufio.NewReader(csvFile))
-	var coutry Country
 
-	fmt.Println(cc)
+	var alpha string
 
 	for {
 		line, error := reader.Read()
@@ -60,7 +59,36 @@ func FindCountry(cc string) Country {
 			log.Fatal(error)
 		}
 
-		if cc == line[3] {
+		if line[1] != "" {
+			if ToInt(cc) == ToInt(line[1]) {
+				alpha = line[0]
+			}
+		}
+	}
+
+	return alpha
+}
+
+// FindCountry : return one Coutry by coutry code
+func FindCountry(alpha string) Country {
+	csvFile, err := os.Open("data/countries.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+	var coutry Country
+
+	fmt.Println(alpha)
+
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		if alpha == line[1] {
 			coutry = Country{
 				Name:          line[0],
 				CC1:           line[1],
@@ -75,7 +103,6 @@ func FindCountry(cc string) Country {
 
 	}
 
-	fmt.Printf("Country: %s\n", coutry.Name)
 	return coutry
 }
 
@@ -98,8 +125,8 @@ func FindMNO(countryName string) []string {
 		}
 
 		if countryName == line[3] {
-			if line[0] != "" {
-				mnos = append(mnos, line[0])
+			if line[4] != "" {
+				mnos = append(mnos, line[4]+",")
 			} else {
 				mnos = append(mnos, "NA")
 			}

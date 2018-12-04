@@ -19,12 +19,11 @@ type Args struct {
 
 // User : model to return
 type User struct {
-	CountryCode       string   `json:"countryCode"`
 	Mno               []string `json:"mno"`
 	DialingCode       string   `json:"dialingCode"`
+	Subscriber        string   `json:"subscriber"`
 	CountryIdentifier string   `json:"counrtyIdentifier"`
 	CountryName       string   `json:"countryName"`
-	Subscriber        string   `json:"subscriber"`
 }
 
 func main() {
@@ -35,7 +34,10 @@ func main() {
 	}
 
 	// Synchronous call
-	args := &Args{6438369110173}
+	// India 918369110173
+	// Russia 78369111222
+	// American Samoa 16848369555888
+	args := &Args{16848369555888}
 	var reply User
 	c := jsonrpc.NewClient(client)
 	err = c.Call("Parser.Extract", args, &reply)
@@ -45,9 +47,8 @@ func main() {
 
 	fmt.Printf("MSISDN: %d\n\n", args.Msisdn)
 
-	fmt.Printf("County code: %s\n", reply.CountryCode)
 	fmt.Println("MNO: ", reply.Mno)
-	fmt.Printf("Dialing code: %s\n", reply.DialingCode)
+	fmt.Printf("Dialing code: +%s\n", reply.DialingCode)
 	fmt.Printf("County identifier: %s\n", reply.CountryIdentifier)
 	fmt.Printf("County name: %s\n", reply.CountryName)
 	fmt.Printf("Subscriber: %s\n", reply.Subscriber)
