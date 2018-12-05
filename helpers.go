@@ -43,6 +43,7 @@ type Dialing struct {
 
 // GetAlpha : get alpha country code by calling code
 func GetAlpha(cc string) string {
+
 	csvFile, err := os.Open("data/dialing-codes.csv")
 	if err != nil {
 		fmt.Println(err)
@@ -71,11 +72,13 @@ func GetAlpha(cc string) string {
 
 // FindCountry : return one Coutry by coutry code
 func FindCountry(alpha string) Country {
+
 	csvFile, err := os.Open("data/countries.csv")
 	if err != nil {
 		fmt.Println(err)
 	}
 	reader := csv.NewReader(bufio.NewReader(csvFile))
+
 	var coutry Country
 
 	fmt.Println(alpha)
@@ -138,10 +141,12 @@ func FindMNO(countryName string) []string {
 
 //GetDialing : find dialing code by country code alpha
 func GetDialing(ccalpha string) string {
+
 	csvFile, err := os.Open("data/dialing-codes.csv")
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 
 	var dialingCode string
@@ -153,6 +158,7 @@ func GetDialing(ccalpha string) string {
 		} else if error != nil {
 			log.Fatal(error)
 		}
+
 		if ccalpha == line[0] {
 			if line[1] != "" {
 				dialingCode = line[1]

@@ -90,7 +90,6 @@ func getContryName() {
 func (t *Parser) Extract(args *Args, reply *User) error {
 	input := args.Msisdn
 
-	// CALLING CODE ITS NOT WHAT DO YOU THINK
 	cc := getCC(input)
 	alpha := GetAlpha(cc)
 	country := FindCountry(alpha)
