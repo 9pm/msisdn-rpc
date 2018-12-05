@@ -115,10 +115,6 @@ func (t *Parser) Extract(args *Args, reply *User) error {
 
 func main() {
 
-	GetAlpha("91")   // IN
-	GetAlpha("7")    // RU
-	GetAlpha("1684") // AS
-
 	cal := new(Parser)
 	server := rpc.NewServer()
 
